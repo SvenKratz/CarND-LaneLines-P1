@@ -18,7 +18,6 @@ The goals / steps of this project are the following:
 [image1]: ./examples/grayscale.jpg "Grayscale"
 [image2]: ./writeup_images/pipeline_example.png "Visualization of pipeline output"
 [image3]: ./writeup_images/drawing_function_diagram.png "Flowchart of updated drawing function"
----
 
 ### Reflection
 
@@ -65,25 +64,26 @@ The function `get_extended_lines`implements line extension. We calculate slope a
 
 The following diagram shows a graphical depiction of the update drawing function:
 
-![alt text](./writeup_images/drawing_function_diagram.png)
-
-
-
-
-
-
-
+![alt text][image3]
 
 ### 2. Identify potential shortcomings with your current pipeline
 
 
-One potential shortcoming would be what would happen when ...
+I noticed these issues with my current approach:
 
-Another shortcoming could be ...
+1. The resulting lines can be "jiggly" if all the parameters for the image processing pipeline are not set exactly right.
+2. I'm not sure how the approach will work with another other cars partially obscuring the lanes in front
+3. It is unclear how the approach would work with narrower or wider lane markings.
+4. The approach may not work at night or perhaps may work better, as lane markers are highlighted by the car's headlights
+5. Hough transform can find several similar line segments, which may lie on the same line if connected. Performance could be optimized if the line drawing functions filtered out or combined line segments that lie on the same line.
 
 
 ### 3. Suggest possible improvements to your pipeline
 
-A possible improvement would be to ...
+I improved upon (1) by adding filtering over multiple frames to smooth out the detected lines. However, the image processing may need to be revisited to improve performance. Surprisingly, though, my pipeline worked very well on the "yellow line" example.
 
-Another potential improvement could be to ...
+The image processing pipeline could, for instance, be improved by applying contrast-enhancing methods (e.g., gray-value normalization) early on to obtain better Canny Edge detection. Morphological operations such as dilation could be used to enhance short, or broken line segments to improve line detection.
+
+As for issues (2)  and (3), it seems that the fixed region of interest seems to be a weak point in the algorithm. A method needs to be used to roughly determine the bounding boxes of this region dynamically. An approach could be to initialize the ROI in a fixed way and then dynamically adapt it based on the last line segments that were found within the region. E.g., if the line segments are found primarily inside, the ROI slowly contracts, if fewer line segments are found the ROI expands. This ROI issue is also one of the causes that the "challenge" video is not running optimally with my pipeline.
+
+For issue 4, I would need additional video material with night-driving footage. One challenge here would be, that, depending on the dip of the low-beam headlights the ROI that contains the lane markings may be smaller than during the daytime, so the image processing pipeline would have to compensate for this.
