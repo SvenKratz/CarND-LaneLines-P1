@@ -5,7 +5,7 @@
 
 This repository contains all my source code and output in completion of project 1 of the Udacity self-driving car nanodegree.
 
-The repository contains the following pertinent files and folders
+The repository contains the following pertinent files and folders:
 
 - `P1.ipynb` is the main file where the source code for the project is located and output videos are viewable via a web browser
 - `writeup.md` is a markdown document that contains the writeup for this project
